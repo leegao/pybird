@@ -1,0 +1,47 @@
+pybird - Using the Birdie in python to access the twitter API
+
+
+Author: Lee Gao
+Website: http://6.dot.ch/
+
+
+NOTE: This is only an experimental library and is far from stable. However if you would like to help me please feel free to fork this project.
+
+1. Why did I make yet another twitter abstraction for python?
+
+Good question, I've used python-twitter and it was fine for people who wants to create complete twitter clients. The problem results when you try to create just a small and simple program that just collects a few statuses and exit. In this case the completeness of python-twitter becomes more of a burden.
+
+Enter pybird
+
+	
+	>>>from pybird import Birdie, Status
+	>>>
+	>>>print Birdie(Status.show.k3057366428).text #Prints out http://twitter.com/statuses/show/3057366428.format's text element (currently only json is supported)
+	@MyUnv by the way, interested in writing an abstraction for tweeter via python?
+	>>>print Birdie(Status.show('3057366428')).user.name #Prints out the name field for the author of status 3057366428
+	Lee Gao
+	>>>k3057366428 = Birdie(Status.show.k3057366428) #Stores the unserialized json object in k3057366428 variable
+	>>>for key in k3057366428.user.keys(): print key, k3057366428.user[key] #Prints out all of the key : value pair in the user-info table
+	id : 18875231
+	verified : False
+	profile_sidebar_fill_color : 252429
+	profile_text_color : 666666
+	followers_count : 691
+	protected : False
+	location : Somewhere in the world
+	...
+	>>>Birdie.login("username", "password") #Fake login
+	>>>print Birdie(Status.update("Hello World from PyBird")) #Uhoh - no authentication
+	{u'request': u'/statuses/update.json', u'error': u'Could not authenticate you.'} 
+	>>>Birdie.login("tgvclan", "******") #Real Login
+	>>>print Birdie(Status.update("Hello World from PyBird")).id
+	3066588823
+
+Now you can actually go check out http://twitter.com/statuses/show/3066588823.xml and see that it's a real live status.
+
+The problem here is that I'm still not quite done with this library. It's actually extremely easy to extend pybird (simply create new resource.res classes as api templates) So if you're interested in helping me out with this project, I would be ever-so-grateful
+
+And one last note: This is just a conceptual experiment, I'm not really planning to extend this into a full-fledge project.
+
+Cheers.
+	
